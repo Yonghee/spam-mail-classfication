@@ -2,7 +2,6 @@ __author__ = 'yhlee'
 
 import re
 
-# regex = re.compile('^(\S+)/:\s+continuous/.$')
 regex = re.compile('^(.+):\s+continuous\.')
 
 f = open("data/spambase.names")
