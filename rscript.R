@@ -26,9 +26,18 @@ spam.fomula <- as.formula(paste('spam=="spam"',paste(spamCols,collapse=' + '),se
 #모델 만들기
 fit <- glm(spam.fomula,family = binomial(link='logit'),data=trainData)
 
-trainData$pred <- predict(fit,newdata = trainData,teyp='response')
-testData$pred <- predict(fit,newdata = testData,type='response')
+#추정하기 ( 확률 )
+train.pred.prob <- predict(fit,newdata = trainData,teyp='response')
 
+#threshold 0.5 로 스팸 정하기. ROC  커브를 통해 threshold 값을 조정해 보아야 함 
+trainData$pred <- as.factor(ifelse(train.pred.prob > 0.5, 'spam','non-spam'))
+
+#Validate Model
+confusionMatrix(data=trainData$spam, reference = trainData$pred)
+
+
+
+test.pred.prob <- predict(fit,newdata = testData,type='response')
+testData$pred <-  as.factor(ifelse(test.pred.prob > 0.5,'spam','non-spam'))
 #Confusion Matrix 
-CM <- table(truth=testData$spam,predition=testData$pred > 0.5)
-print(CM)
+confusionMatrix(data=testData$spam, reference = testData$pred)
