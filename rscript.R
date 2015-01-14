@@ -8,7 +8,6 @@ spam.base.header <- read.csv("./data/headers",header=FALSE,stringsAsFactors = F)
 # column 명에 특수문자가 포함되어 있으므로 make.names를 하지 않으면 as.formula에서 오류가 난다.
 headers <- make.names(spam.base.header[,1],unique=T)
 headers <- c(headers,"spam") 
-
 names(spam.base.df) <- headers
 spam.base.df$spam <- as.factor(ifelse(spam.base.df$spam > 0.5, "spam","non-spam"))
 
@@ -34,8 +33,6 @@ trainData$pred <- as.factor(ifelse(train.pred.prob > 0.5, 'spam','non-spam'))
 
 #Validate Model
 confusionMatrix(data=trainData$spam, reference = trainData$pred)
-
-
 
 test.pred.prob <- predict(fit,newdata = testData,type='response')
 testData$pred <-  as.factor(ifelse(test.pred.prob > 0.5,'spam','non-spam'))
